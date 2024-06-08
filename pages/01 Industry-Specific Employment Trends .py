@@ -339,8 +339,8 @@ news_keywords = {
    "Public Administration [91]": ["Public Administration","urban","community"]
 }
 
-# Dummy API key
-API_TOKEN = 'tZfPvmyG8vGa9MUqaTJzXOzBNtuL6LZgeFP1r5zt'
+# API key
+API_TOKEN = st.secrets["token_news"]
 
 # Base URL for the News API
 BASE_URL = 'https://api.thenewsapi.com/v1/news/all'
