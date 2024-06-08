@@ -340,7 +340,7 @@ news_keywords = {
 }
 
 # API key
-API_TOKEN = st.secrets["token_news"]
+API_TOKEN = st.secrets["db_username"]
 
 # Base URL for the News API
 BASE_URL = 'https://api.thenewsapi.com/v1/news/all'
