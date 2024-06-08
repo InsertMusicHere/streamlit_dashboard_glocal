@@ -1,6 +1,8 @@
 import streamlit as st
 import altair as alt
 import pandas as pd
+from io import StringIO
+import requests
 
 st.set_page_config(layout="wide")
 
@@ -41,7 +43,17 @@ st.title("Interactive Dashboard - Provincial Insights")
 
 @st.cache_data
 def get_data():
-    df = pd.read_csv("D:/Code_hugging_face_/Glocal_s/1410020101_databaseLoadingData.csv")
+
+    # reading file from github
+
+    url = 'https://raw.githubusercontent.com/InsertMusicHere/streamlit_dashboard_glocal/main/1410020101_databaseLoadingData.csv'
+    response = requests.get(url)
+    if response.status_code == 200:
+        df =  pd.read_csv(StringIO(response.text))
+    else:
+        st.error("Failed to load data from GitHub.")
+        
+
     df[['Year', 'Month']] = df['REF_DATE'].str.split('-', expand=True)
     df = df.rename(columns={"North American Industry Classification System (NAICS)":"NAICS"})
     df = df[['Year', 'Month', 'GEO', 'NAICS', 'VALUE', 'STATUS', 'Lat', 'Lang']]
