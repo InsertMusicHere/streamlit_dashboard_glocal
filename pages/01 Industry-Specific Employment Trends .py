@@ -8,6 +8,7 @@ import requests
 
 st.set_page_config(layout = "wide")
 
+
 url = 'https://raw.githubusercontent.com/InsertMusicHere/streamlit_dashboard_glocal/main/1410020101_databaseLoadingData.csv'
 response = requests.get(url)
 if response.status_code == 200:
@@ -90,26 +91,47 @@ regions = ['Goods producing industries [11-33N]','Forestry, logging and support 
 
 industry_analysis = {
    "Goods producing industries [11-33N]": "There is a steady increase in employment from 2020 onwards, indicating robust growth and expansion in this sector during the period. This trend highlights the sector's ability to generate new job opportunities consistently.",
-   "Forestry, logging and support [11N]": "Employment shows slight fluctuations but remains relatively stable over the observed period, suggesting resilience in the face of market variations. This stability is crucial for long-term planning and investment in forestry and logging operations.",
+
+   "Forestry, logging and support [11N]": "Since 2018, it has shown a downward trend in employment. Although there was a slight increase in the number of employees post-COVID, it continues to gradually decline through 2023.",
+
    "Mining, quarrying, and oil and gas extraction [21]": "Noticeable growth in employment from January to May 2018 reflects a positive upward trend, driven by increased demand and production in this industry. This growth underscores the sector's vital role in the national economy and resource extraction.",
+
    "Utilities [22,221]": "Employment remains relatively constant with minor fluctuations, suggesting long-term stability and consistent operational demands in the utilities sector. The steadiness in this sector is essential for maintaining reliable infrastructure services.",
+
    "Construction [23]": "There is a gradual increase in employment from January to May 2018, indicating ongoing growth and development activities in the construction industry. This upward trend signifies a healthy investment environment and expanding infrastructure projects.",
+
    "Manufacturing [31-33]": "A consistent rise in employment throughout the observed months highlights positive growth and increased production capacity in manufacturing. This trend points to a strong manufacturing base and improved industrial output.",
+
    "Wholesale and Retail Trade [41, 44-45]": "Stable employment with slight increases reflects steady demand and consumer confidence in wholesale and retail trade sectors. This consistency is vital for economic stability and consumer market dynamics.",
+
    "Transportation and Warehousing [48-49]": "Employment shows a mild upward trend, indicating gradual growth and expansion in transportation and warehousing services. This growth suggests improved logistics and distribution networks catering to increased commercial activities.",
+
    "Information and Cultural Industries [51]": "Employment remains stable with minor variations, suggesting a steady state and consistent performance in this sector. This stability supports ongoing innovation and cultural development within the industry.",
+
    "Finance and Insurance [52]": "A slight upward trend in employment points to gradual growth and increased financial activities within the finance and insurance industries. This positive trend indicates a robust financial sector capable of supporting economic development.",
+
    "Real Estate and Rental and Leasing [53]": "Employment is stable with minimal fluctuations, indicating consistency and ongoing demand in real estate and rental services. This steadiness reflects a healthy property market and sustained leasing activities.",
+
    "Professional, scientific and technical services [54,541]": "There is a gradual increase in employment, reflecting ongoing growth and investment in professional and technical services. This upward trend highlights the sector's importance in driving innovation and providing specialized expertise.",
+
    "Management of companies and enterprises [55,551,5511]": "Employment remains relatively constant, showing stability and sustained performance in the management of companies and enterprises. This stability is crucial for strategic corporate governance and long-term business planning.",
+
    "Administrative and Support, Waste Management and Remediation Services [56]": "Slight growth in employment over the observed period suggests modest yet positive development in administrative and support services. This growth is indicative of increasing demand for efficient business operations and environmental management services.",
+
    "Educational services [61,611]": "Employment shows a steady upward trend, indicating continuous growth and increased demand in educational services. This trend underscores the importance of education in fostering skill development and knowledge dissemination.",
+
    "Health Care and Social Assistance [62]": "Consistent rise in employment highlights positive growth and expanding needs in the health care and social assistance sectors. This growth is essential for meeting the increasing demands of an aging population and advancing healthcare services.",
+
    "Arts, Entertainment and Recreation [71]": "Employment remains stable with slight fluctuations, suggesting a consistent and resilient performance in arts, entertainment, and recreation. This stability is vital for cultural enrichment and the sustainable development of creative industries.",
+
    "Accommodation and Food Services [72]": "There is a gradual increase in employment, indicating growth and rising demand in accommodation and food services. This positive trend reflects the sector's recovery and expansion, driven by increased tourism and dining activities.",
+
    "Other Services (except Public Administration) [81]": "Employment is stable with minor increases, reflecting steady demand and ongoing activities in other services. This consistency is crucial for supporting diverse community needs and ancillary services.",
+
    "Public Administration [91]": "Employment shows a slight upward trend, indicating gradual growth and sustained government activities in public administration. This growth is essential for maintaining public services and effective governance.",
+   
    "Trade [41-45N]":"Employment in the Trade sector shows a stable trend with slight increases, reflecting steady demand and consumer confidence. This consistency highlights the sector's resilience and its crucial role in facilitating commercial activities and economic stability.",
+
    "Unclassified businesses [00]":"Despite the fluctuations, the presence of employment in this category indicates the existence of emerging or transitional businesses that do not fit traditional industry classifications, suggesting dynamism and potential growth areas within the economy."
 }
 
@@ -227,36 +249,38 @@ with c2:
    if selected_region:
 
       # only_canada_df['VALUE'] = only_canada_df['VALUE'] / 1000000
+      # Grouping data and filtering for selected NAICS
       df_grouped = only_canada_df.groupby(['Year', 'NAICS']).agg({'VALUE': 'mean'}).reset_index()
       df_grouped = df_grouped[df_grouped['NAICS'] == selected_region]
 
+      # Creating the line chart
       small_line_chart = px.line(
          df_grouped,
          x='Year',
          y='VALUE',
          color='NAICS',
          labels={'VALUE': 'Average Employee Numbers', 'Year': 'Year', 'NAICS': 'NAICS'},
-         title='Average Number of Employees in Specific Industries'
+         title='Average Number of Employees in Specific Industries (Hover over line markers for details)'
       )
 
-      small_line_chart.update_traces(mode='lines+markers')
+      # Removing legends
+      small_line_chart.update_layout(showlegend=False)
 
-      # Update layout to wrap legend text and increase plot area
+      # Adding hover information
+      small_line_chart.update_traces(
+         mode='lines+markers'
+      )
+
+      # Update layout to increase plot area
       small_line_chart.update_layout(
-         legend=dict(
-               x=1,
-               y=1,
-               bgcolor='rgba(255, 255, 255, 0)',
-               bordercolor='rgba(255, 255, 255, 0)',
-               title=dict(font=dict(size=12)),
-               font=dict(size=10),
-         ),
          margin=dict(l=40, r=40, t=40, b=40),
          autosize=True,
          height=450  # Increase height for better visibility
       )
 
+      # Displaying the chart
       st.plotly_chart(small_line_chart, use_container_width=True)
+
    else:
 
       df_grouped = only_canada_df.groupby(['Year', 'NAICS']).agg({'VALUE': 'mean'}).reset_index()
@@ -267,20 +291,20 @@ with c2:
          y='VALUE',
          color='NAICS',
          labels={'VALUE': 'Average Employee Numbers', 'Year': 'Year', 'NAICS': 'NAICS'},
-         title='Average Number of Employees in Specific Industries'
+         title='Average Number of Employees in Specific Industries (Hover over line markers for details)'
       )
-      small_line_chart.update_traces(mode='lines+markers')
 
-      # Update layout to wrap legend text and increase plot area
+      # Removing legends
+      small_line_chart.update_layout(showlegend=False)
+
+      # Adding hover information
+      small_line_chart.update_traces(
+         mode='lines+markers',
+         # hovertemplate='<b>%{y}</b> Employees<br>' + selected_region + '<extra></extra>'
+      )
+
+      # Update layout to increase plot area
       small_line_chart.update_layout(
-         legend=dict(
-               x=1,
-               y=1,
-               bgcolor='rgba(255, 255, 255, 0)',
-               bordercolor='rgba(255, 255, 255, 0)',
-               title=dict(font=dict(size=12)),
-               font=dict(size=10),
-         ),
          margin=dict(l=40, r=40, t=40, b=40),
          autosize=True,
          height=450  # Increase height for better visibility
@@ -296,7 +320,7 @@ with c2:
 news_keywords = {
    "Goods producing industries [11-33N]": ["Dairy","packaged foods","products"],
    "Forestry, logging and support [11N]": ["Forestry","lumber","timber"],
-   "Mining, Quarrying, and Oil and Gas Extraction [21]": ["Mining","oil","gold"],
+   "Mining, quarrying, and oil and gas extraction [21]": ["Mining","oil","gold"],
    "Utilities [22,221]": ["Utilities","gas Utilities","water Utilities"],
    "Construction [23]": ["Construction","home building","Houses"],
    "Manufacturing [31-33]": ["Manufacturing","auto Manufacturers","electronics Manufacturing"],
@@ -363,12 +387,16 @@ st.info("Click the button below to fetch the latest news articles related to the
 
 news_button = st.button("Get relevant news articles!")
 
-if news_button:
-   if news_keywords.get(selected_region) != None:
-      param1 = news_keywords.get(selected_region)[0]
-      param2 = news_keywords.get(selected_region)[1]
-      param3 = news_keywords.get(selected_region)[2]
+try:
 
-      func_news(param_1=param1,param_2=param2,param_3=param3)
-   else:
-      func_news(param_="service industry")
+   if news_button:
+      if news_keywords.get(selected_region) != None:
+         param1 = news_keywords.get(selected_region)[0]
+         param2 = news_keywords.get(selected_region)[1]
+         param3 = news_keywords.get(selected_region)[2]
+
+         func_news(param_1=param1,param_2=param2,param_3=param3)
+      else:
+         func_news(param_1="service industry",param_2="Jobs",param_3="work")
+except:
+   st.info("No relevant news found!")
