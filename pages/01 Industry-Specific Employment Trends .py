@@ -1,14 +1,19 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
 import requests
-import math
 import plotly.express as px
+from io import StringIO
+import requests
 
 
 st.set_page_config(layout = "wide")
 
-df = pd.read_csv("D:/Code_hugging_face_/Glocal_s/1410020101_databaseLoadingData.csv")
+url = 'https://raw.githubusercontent.com/InsertMusicHere/streamlit_dashboard_glocal/main/1410020101_databaseLoadingData.csv'
+response = requests.get(url)
+if response.status_code == 200:
+   df =  pd.read_csv(StringIO(response.text))
+else:
+   st.error("Failed to load data from GitHub.")
 
 # --------------
 # Split the 'date_data' column into 'year' and 'month' columns
@@ -58,14 +63,6 @@ st.markdown("This page features analysis and visualizations on employment trends
 # Group by 'Month' and 'NAICS' and calculate the average 'VALUE'
 df_grouped = only_canada_df.groupby(['Year', 'NAICS']).agg({'VALUE': 'mean'}).reset_index()
 
-line_chart = alt.Chart(df_grouped).mark_line().encode(
-    x=alt.X('Year:O', title='Year'),
-    y=alt.Y('VALUE:Q', title='Average Employee Number'),
-    color=alt.Color('NAICS:N', title='NAICS'),
-    tooltip=[alt.Tooltip('Year:O', title='Year'),
-             alt.Tooltip('VALUE:Q', title='Average Employee Number'),
-             alt.Tooltip('NAICS:N', title='NAICS')]
-).interactive()
 
 # Display the chart in Streamlit
 # Calculate total VALUE for each NAICS class
