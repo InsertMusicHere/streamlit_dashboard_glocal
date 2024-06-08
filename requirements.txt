@@ -1,0 +1,7 @@
+numpy==1.26.4
+pandas==2.2.2
+streamlit==1.35.0
+altair==4.2.0
+altgraph==0.17.3
+requests==2.32.3
+plotly==5.10.0
