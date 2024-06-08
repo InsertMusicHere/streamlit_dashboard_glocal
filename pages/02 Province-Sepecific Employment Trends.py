@@ -106,11 +106,13 @@ region_summary = (
     .transform_filter(region_select)
     .properties(width=700, title="Number of Employees by Province (#Abs)")
 )
-# st.write(region_select)
+
+
+# Combine charts into two columns
+top_row = alt.hconcat(region_pie, region_summary)
 
 # Display the charts
-top_row = region_pie | region_summary
-st.altair_chart(top_row)
+st.altair_chart(top_row, use_container_width=True)
 
 st.write("---")
 
