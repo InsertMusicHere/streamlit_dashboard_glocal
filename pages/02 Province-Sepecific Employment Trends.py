@@ -156,3 +156,13 @@ with c2:
         display_kpi_and_table(selected_region)
     else:
         kpi_placeholder.write("Select a region to display the KPI and summary table")
+
+
+st.empty()
+st.divider()
+
+label = '''
+Data Ref: [Statistics Canada. Table 14-10-0201-01  Employment by industry, monthly, unadjusted for seasonality](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410020101)
+'''
+
+st.write(label)
