@@ -41,3 +41,9 @@ st.markdown('''
 
 **3. Empty data points from the 'Values' column have been deleted and data points with a quality status lower than "E" have also been removed.**
 ''')
+
+label = '''
+data source: [Statistics Canada. Table 14-10-0201-01  Employment by industry, monthly, unadjusted for seasonality](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410020101)
+'''
+
+st.write(label)

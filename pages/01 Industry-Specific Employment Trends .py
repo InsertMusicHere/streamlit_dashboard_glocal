@@ -314,9 +314,6 @@ with c2:
 
 
 
-
-
-
 news_keywords = {
    "Goods producing industries [11-33N]": ["Dairy","packaged foods","products"],
    "Forestry, logging and support [11N]": ["Forestry","lumber","timber"],
@@ -379,6 +376,11 @@ def func_news(param_1,param_2,param_3):
          st.markdown(f"**Description:** {article['description']}")
          st.markdown(f"**URL:** [Read more]({article['url']})")
          st.markdown("---")  # Separator line
+
+         print("Title: ",article['title'])
+         print("Date: ",date_str)
+         print("Description: ",article['description'])
+         print("URL: ",article['url'])
    else:
       st.error(f"Failed to fetch articles: {response.status_code}")
 
@@ -406,7 +408,8 @@ st.empty()
 st.divider()
 
 label = '''
-Data Ref: [Statistics Canada. Table 14-10-0201-01  Employment by industry, monthly, unadjusted for seasonality](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410020101)
+data source: [Statistics Canada. Table 14-10-0201-01  Employment by industry, monthly, unadjusted for seasonality](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410020101)
 '''
 
 st.write(label)
+
